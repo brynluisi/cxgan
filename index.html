@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GAN Speech Synthesis Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .audio-container {
+            margin-bottom: 20px;
+        }
+        .model-audio {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>GAN Speech Synthesis Examples</h1>
+
+<label for="audio-select">Select an Audio File:</label>
+<select id="audio-select">
+    <option value="" disabled selected>Choose an audio file</option>
+    <!-- Add your audio file options here -->
+    <option value="audio1">Audio File 1</option>
+    <option value="audio2">Audio File 2</option>
+    <option value="audio3">Audio File 3</option>
+</select>
+
+<div id="audio-examples"></div>
+
+<script>
+    const audioData = {
+        "audio1": {
+            "CXGAN_v1": "https://yourdomain.com/audio1_CXGAN_v1.wav",
+            "CXGAN_v2": "https://yourdomain.com/audio1_CXGAN_v2.wav",
+            "CXGAN_v3": "https://yourdomain.com/audio1_CXGAN_v3.wav",
+            "CXGAN_v4": "https://yourdomain.com/audio1_CXGAN_v4.wav",
+            "CXGAN_v5": "https://yourdomain.com/audio1_CXGAN_v5.wav",
+            "CXGAN_v6": "https://yourdomain.com/audio1_CXGAN_v6.wav",
+            "HiFiGAN_v1": "https://yourdomain.com/audio1_HiFiGAN_v1.wav",
+            "HiFiGAN_v2": "https://yourdomain.com/audio1_HiFiGAN_v2.wav",
+            "HiFiGAN_v3": "https://yourdomain.com/audio1_HiFiGAN_v3.wav",
+            "Ground_Truth": "https://yourdomain.com/audio1_Ground_Truth.wav"
+        },
+        "audio2": {
+            "CXGAN_v1": "https://yourdomain.com/audio2_CXGAN_v1.wav",
+            // Add the rest of the URLs similarly
+        },
+        "audio3": {
+            // Add the URLs for audio3
+        }
+    };
+
+    const audioSelect = document.getElementById('audio-select');
+    const audioExamples = document.getElementById('audio-examples');
+
+    audioSelect.addEventListener('change', function() {
+        const selectedAudio = this.value;
+        audioExamples.innerHTML = '';
+
+        if (audioData[selectedAudio]) {
+            const models = audioData[selectedAudio];
+
+            for (const [modelName, audioUrl] of Object.entries(models)) {
+                const container = document.createElement('div');
+                container.classList.add('audio-container');
+
+                const title = document.createElement('h3');
+                title.textContent = modelName;
+                container.appendChild(title);
+
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.src = audioUrl;
+                container.appendChild(audio);
+
+                audioExamples.appendChild(container);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
