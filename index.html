@@ -22,64 +22,134 @@
 <label for="audio-select">Select an Audio File:</label>
 <select id="audio-select">
     <option value="" disabled selected>Choose an audio file</option>
-    <!-- Add your audio file options here -->
-    <option value="audio1">Audio File 1</option>
-    <option value="audio2">Audio File 2</option>
-    <option value="audio3">Audio File 3</option>
+    <!-- Options will be populated dynamically -->
 </select>
 
 <div id="audio-examples"></div>
 
 <script>
-    const audioData = {
-        "audio1": {
-            "CXGAN_v1": "https://yourdomain.com/audio1_CXGAN_v1.wav",
-            "CXGAN_v2": "https://yourdomain.com/audio1_CXGAN_v2.wav",
-            "CXGAN_v3": "https://yourdomain.com/audio1_CXGAN_v3.wav",
-            "CXGAN_v4": "https://yourdomain.com/audio1_CXGAN_v4.wav",
-            "CXGAN_v5": "https://yourdomain.com/audio1_CXGAN_v5.wav",
-            "CXGAN_v6": "https://yourdomain.com/audio1_CXGAN_v6.wav",
-            "HiFiGAN_v1": "https://yourdomain.com/audio1_HiFiGAN_v1.wav",
-            "HiFiGAN_v2": "https://yourdomain.com/audio1_HiFiGAN_v2.wav",
-            "HiFiGAN_v3": "https://yourdomain.com/audio1_HiFiGAN_v3.wav",
-            "Ground_Truth": "https://yourdomain.com/audio1_Ground_Truth.wav"
-        },
-        "audio2": {
-            "CXGAN_v1": "https://yourdomain.com/audio2_CXGAN_v1.wav",
-            // Add the rest of the URLs similarly
-        },
-        "audio3": {
-            // Add the URLs for audio3
+// List of available audio files (from your directory structure)
+const audioFiles = [
+    "1089_134686_000001_000001.wav",
+    "1089_134691_000004_000001.wav",
+    "1089_134691_000027_000004.wav",
+    "1284_1181_000005_000000.wav",
+    "1320_122612_000019_000005.wav",
+    "1320_122612_000056_000002.wav",
+    "1580_141083_000012_000000.wav",
+    "1580_141083_000063_000001.wav",
+    "1580_141084_000085_000000.wav",
+    "1995_1826_000022_000001.wav",
+    "1995_1836_000016_000001.wav",
+    "1995_1837_000024_000000.wav",
+    "2300_131720_000016_000005.wav",
+    "2300_131720_000030_000005.wav",
+    "237_126133_000002_000004.wav",
+    "237_134500_000001_000001.wav",
+    "2830_3980_000018_000001.wav",
+    "3570_5694_000009_000003.wav",
+    "3570_5695_000001_000003.wav",
+    "3570_5696_000011_000006.wav",
+    "3729_6852_000004_000003.wav",
+    "4077_13754_000002_000000.wav",
+    "4446_2273_000008_000002.wav",
+    "4446_2273_000027_000004.wav",
+    "4446_2275_000013_000000.wav",
+    "4446_2275_000038_000006.wav",
+    "4507_16021_000011_000000.wav",
+    "4507_16021_000030_000001.wav",
+    "4970_29093_000010_000000.wav",
+    "4992_41797_000014_000002.wav",
+    "5105_28241_000004_000004.wav",
+    "5142_33396_000004_000004.wav",
+    "5142_36377_000013_000003.wav",
+    "5683_32879_000036_000002.wav",
+    "6829_68769_000011_000000.wav",
+    "6829_68771_000018_000003.wav",
+    "6930_81414_000041_000001.wav",
+    "7021_79740_000010_000006.wav",
+    "7021_85628_000017_000000.wav",
+    "7127_75946_000061_000001.wav",
+    "7176_88083_000002_000003.wav",
+    "7176_88083_000017_000000.wav",
+    "7729_102255_000028_000009.wav",
+    "8455_210777_000022_000003.wav",
+    "8455_210777_000064_000001.wav",
+    "8463_294825_000048_000000.wav",
+    "8463_294828_000046_000001.wav",
+    "8555_284447_000018_000002.wav",
+    "8555_284447_000049_000000.wav",
+    "8555_284449_000039_000000.wav"
+];
+
+// List of models
+const models = [
+    "cxgan-v1",
+    "cxgan-v2",
+    "cxgan-v3",
+    "cxgan-v4",
+    "cxgan-v5",
+    "cxgan-v6",
+    "hifigan-v1",
+    "hifigan-v2",
+    "hifigan-v3",
+    "natural" // Ground Truth
+];
+
+// Build the audioData object
+const audioData = {};
+
+audioFiles.forEach(fileName => {
+    audioData[fileName] = {};
+    models.forEach(model => {
+        // Construct the URL to the audio file
+        const audioUrl = `sound_examples/${model}/${fileName}`;
+        // For display purposes, format the model name
+        let displayName = model;
+        if (model === "natural") {
+            displayName = "Ground Truth";
+        } else {
+            displayName = model.toUpperCase();
         }
-    };
-
-    const audioSelect = document.getElementById('audio-select');
-    const audioExamples = document.getElementById('audio-examples');
-
-    audioSelect.addEventListener('change', function() {
-        const selectedAudio = this.value;
-        audioExamples.innerHTML = '';
-
-        if (audioData[selectedAudio]) {
-            const models = audioData[selectedAudio];
-
-            for (const [modelName, audioUrl] of Object.entries(models)) {
-                const container = document.createElement('div');
-                container.classList.add('audio-container');
-
-                const title = document.createElement('h3');
-                title.textContent = modelName;
-                container.appendChild(title);
-
-                const audio = document.createElement('audio');
-                audio.controls = true;
-                audio.src = audioUrl;
-                container.appendChild(audio);
-
-                audioExamples.appendChild(container);
-            }
-        }
+        audioData[fileName][displayName] = audioUrl;
     });
+});
+
+// Populate the select options
+const audioSelect = document.getElementById('audio-select');
+audioFiles.forEach(fileName => {
+    const option = document.createElement('option');
+    option.value = fileName;
+    option.textContent = fileName;
+    audioSelect.appendChild(option);
+});
+
+const audioExamples = document.getElementById('audio-examples');
+
+audioSelect.addEventListener('change', function() {
+    const selectedAudio = this.value;
+    audioExamples.innerHTML = '';
+
+    if (audioData[selectedAudio]) {
+        const models = audioData[selectedAudio];
+
+        for (const [modelName, audioUrl] of Object.entries(models)) {
+            const container = document.createElement('div');
+            container.classList.add('audio-container');
+
+            const title = document.createElement('h3');
+            title.textContent = modelName;
+            container.appendChild(title);
+
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = audioUrl;
+            container.appendChild(audio);
+
+            audioExamples.appendChild(container);
+        }
+    }
+});
 </script>
 
 </body>
